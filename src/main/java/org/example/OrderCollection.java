@@ -122,22 +122,61 @@ public class OrderCollection {
             switch (choice) {
                 case 1:
                     // Insert order example
-                    Document order = new Document("orderid", 1)
-                            .append("products", Arrays.asList(
-                                    new Document("product_id", "quanau")
-                                            .append("product_name", "quan au")
-                                            .append("size", "XL")
-                                            .append("price", 10)
-                                            .append("quantity", 1),
-                                    new Document("product_id", "somi")
-                                            .append("product_name", "ao so mi")
-                                            .append("size", "XL")
-                                            .append("price", 10.5)
-                                            .append("quantity", 2)
-                            ))
-                            .append("total_amount", 31)
-                            .append("delivery_address", "Hanoi");
+                    System.out.print("Enter order ID: ");
+                    int orderId = scanner.nextInt();
+
+                    System.out.print("Enter delivery address: ");
+                    scanner.nextLine();  // Consume newline left-over
+                    String deliveryAddress = scanner.nextLine();
+
+                    // Collecting product details
+                    Document product1 = new Document();
+                    System.out.print("Enter product ID for first product: ");
+                    product1.append("product_id", scanner.nextLine());
+
+                    System.out.print("Enter product name for first product: ");
+                    product1.append("product_name", scanner.nextLine());
+
+                    System.out.print("Enter size for first product: ");
+                    product1.append("size", scanner.nextLine());
+
+                    System.out.print("Enter price for first product: ");
+                    product1.append("price", scanner.nextDouble());
+
+                    System.out.print("Enter quantity for first product: ");
+                    product1.append("quantity", scanner.nextInt());
+
+                    scanner.nextLine();  // Consume newline left-over
+
+                    Document product2 = new Document();
+                    System.out.print("Enter product ID for second product: ");
+                    product2.append("product_id", scanner.nextLine());
+
+                    System.out.print("Enter product name for second product: ");
+                    product2.append("product_name", scanner.nextLine());
+
+                    System.out.print("Enter size for second product: ");
+                    product2.append("size", scanner.nextLine());
+
+                    System.out.print("Enter price for second product: ");
+                    product2.append("price", scanner.nextDouble());
+
+                    System.out.print("Enter quantity for second product: ");
+                    product2.append("quantity", scanner.nextInt());
+
+                    // Calculating total amount
+                    double totalAmount = (product1.getDouble("price") * product1.getInteger("quantity")) +
+                            (product2.getDouble("price") * product2.getInteger("quantity"));
+
+                    // Creating order document
+                    Document order = new Document("orderid", orderId)
+                            .append("products", Arrays.asList(product1, product2))
+                            .append("total_amount", totalAmount)
+                            .append("delivery_address", deliveryAddress);
+
+                    // Insert the order into the database (assuming orderService is set up)
                     orderService.insertOrder(order);
+
                     System.out.println("Order inserted successfully!");
                     break;
                 case 2:
